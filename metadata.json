@@ -1,6 +1,0 @@
-{
-  "name": "StudyFlow",
-  "description": "An elegant glassmorphic student semester planner to track courses, assignments, exams, GPA, attendance, and weekly timetables in one place.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

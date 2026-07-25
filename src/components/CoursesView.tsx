@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
   MapPin, Plus, Trash2, Edit3, Calendar, Check,
-  Clock, PlusCircle, MessageSquare, User, BookOpen
+  Clock, PlusCircle, MessageSquare, User, BookOpen, BrainCircuit
 } from 'lucide-react';
 import { Course, CourseSchedule, COURSE_COLORS, Semester } from '../types';
 import { CustomSelect, CustomTimePicker } from './ui/CustomInputs';
 import ConfirmModal from './ui/ConfirmModal';
+import AiFlashcardsModal from './ui/AiFlashcardsModal';
 
 interface CoursesViewProps {
   currentSemester: Semester | null;
@@ -51,6 +52,8 @@ export default function CoursesView({
     name: '',
     code: ''
   });
+
+  const [flashcardsCourse, setFlashcardsCourse] = useState<string | null>(null);
 
   // Trigger when Quick Action is clicked from Dashboard
   if (onQuickActionTrigger === 'add-course' && !isAdding) {
@@ -609,6 +612,13 @@ export default function CoursesView({
                 {/* Course Actions Footer */}
                 <div className="flex gap-2 w-full pt-3 mt-1.5 border-t border-white/5 justify-end">
                   <button 
+                    onClick={() => setFlashcardsCourse(course.name)}
+                    className="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1 cursor-pointer px-1.5 py-0.5 rounded hover:bg-indigo-500/10"
+                  >
+                    <BrainCircuit className="w-3 h-3" />
+                    <span>Flashcards</span>
+                  </button>
+                  <button 
                     onClick={() => startEdit(course)}
                     className="text-[10px] text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer px-1.5 py-0.5 rounded hover:bg-white/5"
                   >
@@ -653,6 +663,12 @@ export default function CoursesView({
         onConfirm={() => onDeleteCourse(deleteConfirm.id)}
         onCancel={() => setDeleteConfirm({ isOpen: false, id: '', name: '', code: '' })}
         isDestructive={true}
+      />
+
+      <AiFlashcardsModal
+        isOpen={!!flashcardsCourse}
+        onClose={() => setFlashcardsCourse(null)}
+        courseName={flashcardsCourse || ''}
       />
     </div>
   );

@@ -21,6 +21,8 @@ import TimetableView from './components/TimetableView';
 import GpaCalculatorView from './components/GpaCalculatorView';
 import ExamsView from './components/ExamsView';
 import SettingsView from './components/SettingsView';
+import AiWorkspaceView from './components/AiWorkspaceView';
+import { Bot } from 'lucide-react';
 
 const ACCENT_PALETTES: Record<string, Record<string, string>> = {
   '#6366f1': { // Classic Indigo
@@ -121,6 +123,15 @@ export default function App() {
       });
     }
   }, [data?.settings?.accentColor]);
+
+  // Apply theme class to body so that portals (modals) also respect the theme
+  useEffect(() => {
+    if (data?.settings?.theme === 'light') {
+      document.body.classList.add('light-theme');
+    } else {
+      document.body.classList.remove('light-theme');
+    }
+  }, [data?.settings?.theme]);
 
   // Save changes to Local Storage
   const saveToLocalStorage = (updatedData: StudyFlowData) => {
@@ -391,6 +402,7 @@ export default function App() {
     { id: 'timetable', name: 'Weekly Timetable', icon: Clock },
     { id: 'gpa', name: 'GPA Calculator', icon: GraduationCap },
     { id: 'exams', name: 'Exams Vault', icon: AlertTriangle },
+    { id: 'ai-workspace', name: 'AI Workspace', icon: Bot },
     { id: 'settings', name: 'System Settings', icon: Settings },
   ];
 
@@ -479,6 +491,8 @@ export default function App() {
             onClearQuickActionTrigger={handleClearQuickActionTrigger}
           />
         );
+      case 'ai-workspace':
+        return <AiWorkspaceView />;
       case 'settings':
         return (
           <SettingsView

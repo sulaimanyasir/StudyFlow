@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
   Search, Grid, List, PlusCircle, CheckCircle2, Edit3, 
-  Trash2, Filter, Check, Clock, Calendar
+  Trash2, Filter, Check, Clock, Calendar, Sparkles
 } from 'lucide-react';
 import { Assignment, Course, Priority, AssignmentStatus, Semester, AssignmentType } from '../types';
 import { CustomSelect, CustomDatePicker } from './ui/CustomInputs';
 import ConfirmModal from './ui/ConfirmModal';
+import AiQuickAddBar from './ui/AiQuickAddBar';
+import AiStudyPlanModal from './ui/AiStudyPlanModal';
+import { QuickAddResult, StudyPlanInput } from '../services/aiService';
 
 interface AssignmentsViewProps {
   currentSemester: Semester | null;
@@ -49,6 +52,17 @@ export default function AssignmentsView({
     title: ''
   });
 
+  const [studyPlanTask, setStudyPlanTask] = useState<StudyPlanInput | null>(null);
+  const openStudyPlan = (asg: Assignment) => {
+    setStudyPlanTask({
+      title: asg.title,
+      type: asg.type,
+      dueDate: asg.dueDate,
+      estimatedHours: asg.estimatedHours,
+      description: asg.description,
+    });
+  };
+
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -66,6 +80,17 @@ export default function AssignmentsView({
   // Pre-fill courseId if courses are available
   const activeCourses = courses.filter(c => c.semesterId === currentSemester?.id);
   const defaultCourseId = activeCourses[0]?.id || '';
+
+  const handleAiQuickAdd = (result: QuickAddResult) => {
+    setTitle(result.title || '');
+    setCourseId(result.courseId || defaultCourseId);
+    setDueDate(result.dueDate || '');
+    setPriority((result.priority as Priority) || 'medium');
+    setType((result.type as AssignmentType) || 'assignment');
+    setEstimatedHours(result.estimatedHours || 4);
+    setStatus('pending');
+    setIsAdding(true);
+  };
 
   const handleSubmitAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -225,6 +250,10 @@ export default function AssignmentsView({
 
   return (
     <div className="space-y-8 pb-12">
+      {!isAdding && !editingId && (
+        <AiQuickAddBar courses={courses} onParsed={handleAiQuickAdd} placeholder='Try "DBMS assignment due next Friday, high priority"' />
+      )}
+
       {/* Page Title & Add task */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -599,6 +628,13 @@ export default function AssignmentsView({
 
                       <div className="flex items-center gap-1">
                         <button 
+                          onClick={() => openStudyPlan(asg)}
+                          className="p-1 rounded bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400"
+                          title="AI Study Plan"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                        </button>
+                        <button 
                           onClick={() => startEdit(asg)}
                           className="p-1 rounded bg-white/5 hover:bg-white/10 text-slate-300"
                           title="Edit Task"
@@ -697,6 +733,13 @@ export default function AssignmentsView({
                       {/* Actions */}
                       <div className="col-span-1 text-right flex justify-end gap-1.5">
                         <button 
+                          onClick={() => openStudyPlan(asg)}
+                          className="p-1 rounded bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400"
+                          title="AI Study Plan"
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                        </button>
+                        <button 
                           onClick={() => startEdit(asg)}
                           className="p-1 rounded bg-white/5 hover:bg-white/10 text-slate-300"
                         >
@@ -741,6 +784,12 @@ export default function AssignmentsView({
         onConfirm={() => onDeleteAssignment(deleteConfirm.id)}
         onCancel={() => setDeleteConfirm({ isOpen: false, id: '', title: '' })}
         isDestructive={true}
+      />
+
+      <AiStudyPlanModal
+        isOpen={!!studyPlanTask}
+        onClose={() => setStudyPlanTask(null)}
+        task={studyPlanTask}
       />
     </div>
   );

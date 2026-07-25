@@ -5,6 +5,7 @@ import {
   ArrowRight, Plus, MapPin, User, AlertTriangle, AlertCircle, CheckCircle, Settings
 } from 'lucide-react';
 import { Course, Assignment, Exam, Semester, Priority } from '../types';
+import AiWeeklyDigest from './ui/AiWeeklyDigest';
 
 interface DashboardViewProps {
   user: { name: string; currentSemesterId: string };
@@ -212,6 +213,8 @@ export default function DashboardView({
           <span className="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">Local Live Time</span>
         </div>
       </motion.div>
+
+      <AiWeeklyDigest courses={courses} assignments={assignments} exams={exams} />
 
       {activeNotifications.length > 0 && (
         <motion.div 

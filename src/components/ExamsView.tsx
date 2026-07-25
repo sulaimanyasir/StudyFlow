@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
   PlusCircle, Calendar, Clock, MapPin, Edit3, Trash2, 
-  CheckCircle, CheckCircle2
+  CheckCircle, CheckCircle2, Sparkles
 } from 'lucide-react';
 import { Exam, Course, ExamType, Semester } from '../types';
 import { CustomSelect, CustomDatePicker, CustomTimePicker } from './ui/CustomInputs';
 import ConfirmModal from './ui/ConfirmModal';
+import AiQuickAddBar from './ui/AiQuickAddBar';
+import AiStudyPlanModal from './ui/AiStudyPlanModal';
+import { QuickAddResult, StudyPlanInput } from '../services/aiService';
 
 interface ExamsViewProps {
   currentSemester: Semester | null;
@@ -49,7 +52,16 @@ export default function ExamsView({
     title: ''
   });
 
-
+  const [studyPlanTask, setStudyPlanTask] = useState<StudyPlanInput | null>(null);
+  const openStudyPlan = (exam: Exam) => {
+    setStudyPlanTask({
+      title: exam.title,
+      type: exam.type,
+      dueDate: exam.date,
+      estimatedHours: 6,
+      description: exam.notes,
+    });
+  };
 
   // Trigger when Quick Action is clicked from Dashboard
   if (onQuickActionTrigger === 'add-exam' && !isAdding) {
@@ -59,6 +71,16 @@ export default function ExamsView({
 
   const activeCourses = courses.filter(c => c.semesterId === currentSemester?.id);
   const defaultCourseId = activeCourses[0]?.id || '';
+
+  const handleAiQuickAdd = (result: QuickAddResult) => {
+    setTitle(result.title || '');
+    setCourseId(result.courseId || defaultCourseId);
+    setDate(result.dueDate || '');
+    setTime(result.time || '10:00');
+    setRoom(result.room || '');
+    setType((result.type as ExamType) || 'midterm');
+    setIsAdding(true);
+  };
 
   const handleSubmitAdd = (e: React.FormEvent) => {
     e.preventDefault();
@@ -179,6 +201,10 @@ export default function ExamsView({
 
   return (
     <div className="space-y-8 pb-12">
+      {!isAdding && !editingId && (
+        <AiQuickAddBar courses={courses} onParsed={handleAiQuickAdd} placeholder='Try "DBMS midterm on Aug 12 at 10am in Room 204"' />
+      )}
+
       {/* Title Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -418,6 +444,13 @@ export default function ExamsView({
                           <span>Check</span>
                         </button>
                         <button 
+                          onClick={() => openStudyPlan(exam)}
+                          className="p-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 transition-colors"
+                          title="AI Study Plan"
+                        >
+                          <Sparkles className="w-4 h-4" />
+                        </button>
+                        <button 
                           onClick={() => startEdit(exam)}
                           className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors"
                           title="Edit Exam"
@@ -516,6 +549,12 @@ export default function ExamsView({
         onConfirm={() => onDeleteExam(deleteConfirm.id)}
         onCancel={() => setDeleteConfirm({ isOpen: false, id: '', title: '' })}
         isDestructive={true}
+      />
+
+      <AiStudyPlanModal
+        isOpen={!!studyPlanTask}
+        onClose={() => setStudyPlanTask(null)}
+        task={studyPlanTask}
       />
     </div>
   );

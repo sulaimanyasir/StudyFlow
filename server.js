@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 });
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
 
 // Calls Gemini and returns parsed JSON. If schema is passed, forces structured JSON output.
 async function callGemini(prompt, schema) {

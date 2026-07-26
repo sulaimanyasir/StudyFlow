@@ -75,16 +75,28 @@ For Document Chat, the context is dynamically injected:
 *(Replace these placeholder links with actual images by placing them in a `screenshots` folder!)*
 
 1. **The Dashboard & Weekly Digest**  
-   ![Dashboard Demo](./screenshots/dashboard-placeholder.png)  
+   ![Dashboard Demo](./screenshots/dashboard.png)  
    *Overview of upcoming tasks with the AI-generated weekly digest.*
 
 2. **The AI Workspace (Document Chat)**  
-   ![AI Workspace](./screenshots/ai-workspace-placeholder.png)  
+   ![AI Workspace](./screenshots/ai-workspace.png)  
    *Chatting directly with an uploaded PDF syllabus.*
 
-3. **Interactive Quiz Generator**  
-   ![Quiz Generator](./screenshots/quiz-placeholder.png)  
-   *Taking a dynamically generated AI quiz based on study notes.*
+3. **Tasks & Deadlines**  
+   ![Tasks Manager](./screenshots/tasks.png)  
+   *Managing course assignments, projects, and upcoming deadlines with the help of AI.*
+
+4. **Study Plan Generator**  
+   ![Study Plan Generator](./screenshots/study-plan.png)  
+   *Generating a day-by-day study plan for a task.*
+
+5. **AI Flashcards**  
+   ![AI Flashcards](./screenshots/flashcards.png)  
+   *Generating practice flashcards for a topic.*
+
+6. **Natural Language Quick-Add**  
+   ![Natural Language Quick-Add](./screenshots/quick-add.png)  
+   *Adding a new task using natural language.*
 
 ---
 

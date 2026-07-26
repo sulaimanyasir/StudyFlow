@@ -23,6 +23,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Simple health check route to verify the backend is running
+app.get('/', (req, res) => {
+  res.send('StudyFlow Backend is running perfectly!');
+});
+
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
 

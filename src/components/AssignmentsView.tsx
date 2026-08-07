@@ -658,30 +658,31 @@ export default function AssignmentsView({
         ) : (
           /* List View Mode */
           <div className="bg-white/[0.02] border border-white/10 rounded-3xl backdrop-blur-md overflow-hidden">
-            <div className="min-w-full divide-y divide-white/5">
-              <div className="bg-slate-950/20 grid grid-cols-12 gap-2 p-4 text-[10px] font-mono tracking-wider font-bold text-slate-400 uppercase">
-                <div className="col-span-6 flex items-center gap-2">TITLE & DESCRIPTION</div>
-                <div className="col-span-2">COURSE</div>
-                <div className="col-span-1 text-center">HOURS</div>
-                <div className="col-span-1 text-center">PRIORITY</div>
-                <div className="col-span-1 text-center">STATUS</div>
-                <div className="col-span-1 text-right">ACTION</div>
-              </div>
+            <div className="overflow-x-auto">
+              <div className="min-w-[900px] divide-y divide-white/5">
+                <div className="bg-slate-950/20 grid grid-cols-12 gap-4 p-4 text-[10px] font-mono tracking-wider font-bold text-slate-400 uppercase">
+                  <div className="col-span-5 flex items-center gap-2">TITLE & DESCRIPTION</div>
+                  <div className="col-span-2">COURSE</div>
+                  <div className="col-span-1 text-center">HOURS</div>
+                  <div className="col-span-1 text-center flex justify-center">PRIORITY</div>
+                  <div className="col-span-1 text-center flex justify-center">STATUS</div>
+                  <div className="col-span-2 text-right pr-2">ACTION</div>
+                </div>
 
-              <div className="divide-y divide-white/5">
-                {filteredAssignments.map(asg => {
+                <div className="divide-y divide-white/5">
+                  {filteredAssignments.map(asg => {
                   const course = courses.find(c => c.id === asg.courseId);
                   const isCompleted = asg.status === 'completed';
 
                   return (
                     <div 
                       key={asg.id}
-                      className={`grid grid-cols-12 gap-2 p-4 items-center hover:bg-white/[0.02] transition-colors text-xs text-slate-300 ${
+                      className={`grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/[0.02] transition-colors text-xs text-slate-300 ${
                         isCompleted ? 'opacity-65' : ''
                       }`}
                     >
                       {/* Checkbox + Title */}
-                      <div className="col-span-6 flex items-start gap-3">
+                      <div className="col-span-5 flex items-start gap-3">
                         <button 
                           onClick={() => handleToggleComplete(asg)}
                           className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
@@ -717,21 +718,21 @@ export default function AssignmentsView({
                       <div className="col-span-1 text-center font-mono">{asg.estimatedHours}h</div>
 
                       {/* Priority */}
-                      <div className="col-span-1 text-center">
-                        <span className={`text-[9px] px-2 py-0.5 rounded border uppercase font-mono tracking-wider ${getPriorityClasses(asg.priority)}`}>
+                      <div className="col-span-1 text-center flex justify-center">
+                        <span className={`text-[9px] px-2 py-0.5 rounded border uppercase font-mono tracking-wider w-fit ${getPriorityClasses(asg.priority)}`}>
                           {asg.priority}
                         </span>
                       </div>
 
                       {/* Status */}
-                      <div className="col-span-1 text-center">
-                        <span className={`text-[9px] px-2 py-0.5 rounded border uppercase font-mono tracking-wider ${getStatusClasses(asg.status)}`}>
+                      <div className="col-span-1 text-center flex justify-center">
+                        <span className={`text-[9px] px-2 py-0.5 rounded border uppercase font-mono tracking-wider w-fit ${getStatusClasses(asg.status)}`}>
                           {asg.status}
                         </span>
                       </div>
 
                       {/* Actions */}
-                      <div className="col-span-1 text-right flex justify-end gap-1.5">
+                      <div className="col-span-2 text-right flex justify-end gap-1.5">
                         <button 
                           onClick={() => openStudyPlan(asg)}
                           className="p-1 rounded bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400"
@@ -759,6 +760,7 @@ export default function AssignmentsView({
               </div>
             </div>
           </div>
+        </div>
         )
       ) : (
         <div className="py-16 text-center border-2 border-dashed border-white/10 rounded-3xl p-8 bg-slate-900/10">
